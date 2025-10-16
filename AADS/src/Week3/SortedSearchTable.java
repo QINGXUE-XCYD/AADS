@@ -1,10 +1,16 @@
 package Week3;
 
-import java.util.Comparator;
-import java.util.Set;
-import java.util.SortedMap;
+import java.util.*;
 
-public class SortedSearchTable<K,V> extends AbstractSortedMap<K,V> {
+public class SortedSearchTable<K, V> extends AbstractSortedMap<K, V> {
+
+    private List<Map.Entry<K, V>> table = new ArrayList<>();
+
+    // constructor
+    public SortedSearchTable() {
+        super();
+    }
+
     @Override
     public Comparator<? super K> comparator() {
         return null;
@@ -37,6 +43,30 @@ public class SortedSearchTable<K,V> extends AbstractSortedMap<K,V> {
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return Set.of();
+        return new HashSet<>(table);
     }
+
+    public SortedSearchTable(Comparator<K> c) {
+        super(c);
+    }
+
+
+    private int findIndex(K key) {
+        int low = 0;
+        int high = table.size() - 1;
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            int cmp = compare(key, table.get(mid).getKey());
+            if (cmp == 0) return mid;
+            else if (cmp < 0) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return low;
+    }
+
+
 }
+
